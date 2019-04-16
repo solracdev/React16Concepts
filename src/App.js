@@ -12,7 +12,8 @@ class App extends Component {
       { name: 'Carlos', age: 30 },
       { name: 'Paco', age: 50 },
       { name: 'Foo', age: 10 }
-    ]
+    ],
+    showPersons: false
   }
 
   switchNameHandler = newName => {
@@ -37,6 +38,11 @@ class App extends Component {
     });
   }
 
+  togglePersonsHandler = () => {
+    const show = this.state.showPersons;
+    this.setState({ showPersons: !show });
+  }
+
   render() {
     // use css style a js object
     let styleObj = {
@@ -46,7 +52,24 @@ class App extends Component {
       padding: '8px',
       cursor: 'pointer'
     }
-    
+
+    let persons = null;
+
+    if (this.state.showPersons) {
+      persons = (
+        <div>
+          {this.state.persons.map(person => {
+            return <Person
+              name={person.name}
+              age={person.age}
+            />
+          })}
+        </div>
+      );
+    }
+
+    console.log(persons);
+
     return (
       <div className='App'>
         <h1>Hi, from the react app!</h1>
@@ -55,27 +78,13 @@ class App extends Component {
         {/* calling the function without (), because calling it with switchNameHandler()
          will render automatically on DOM render */}
         <button
-        style={styleObj} 
-        onClick={this.switchNameHandler.bind(this, "Carlos IX")}>Switch Names</button>
+          style={styleObj}
+          onClick={this.togglePersonsHandler}>Toggle Persons</button>
 
         {/* another way to call the function with arguments is using flat arrow function */}
         {/* this one is more inefficient may impact in performance */}
         {/* <button onClick={() => this.switchNameHandler("King Carlos II")}>Switch Names</button> */}
-
-        {/* Use the component that we just have imported */}
-        {/* Pass variables value to the props in the function Person */}
-        <Person
-          name={this.state.persons[0].name}
-          age={this.state.persons[0].age} />
-        {/* To use the text between the component we'll use the props.children in the function */}
-        <Person
-          name={this.state.persons[1].name}
-          age={this.state.persons[1].age}
-          click={this.switchNameHandler.bind(this, "Amateratsu")}
-          change={this.nameChangeHandler}>My hobbies: racing </Person>
-        <Person
-          name={this.state.persons[2].name}
-          age={this.state.persons[2].age} />
+        {persons}
       </div>
     );
   }
