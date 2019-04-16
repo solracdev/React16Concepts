@@ -9,33 +9,49 @@ class App extends Component {
   // in the later versions of react it's possible to use it in components functions
   state = {
     persons: [
-      { name: 'Carlos', age: 30 },
-      { name: 'Paco', age: 50 },
-      { name: 'Foo', age: 10 }
+      { id: "Blue", name: 'Carlos', age: 30 },
+      { id: "Red", name: 'Paco', age: 50 },
+      { id: "Green", name: 'Foo', age: 10 }
     ],
     showPersons: false
   }
 
-  switchNameHandler = newName => {
-    // DONT DO THIS this.state.persons[0].name = "JHON DOE";
-    // to change the state property we can use the method setState include in the Component
-    this.setState({
-      persons: [
-        { name: newName, age: 80 },
-        { name: 'Jhon Doe', age: 66 },
-        { name: 'Foo Foo', age: 16 }
-      ]
-    });
+  deletePersonHandler = personIndex => {
+    // clone the array instead using same instance
+    // old version using slice w/o arrguments
+    //const updatedPersons = this.state.persons.slice();
+    // with new ES6 and spread operator
+    const updatedPersons = [...this.state.persons];
+    updatedPersons.splice(personIndex, 1);
+    this.setState({ persons: updatedPersons });
   }
 
-  nameChangeHandler = event => {
-    this.setState({
-      persons: [
-        { name: "Carlos XX", age: 80 },
-        { name: event.target.value, age: 66 },
-        { name: 'Foo Foo', age: 16 }
-      ]
-    });
+  nameChangeHandler = (event, personId) => {
+
+    // using findIndex() retunrs the index of the object
+    const indexPerson = this.state.persons.findIndex(person => person.id === personId);
+
+    // using find() returns the object
+    //const objPerson = this.state.persons.find(person => person.id === personId);
+
+    // clone the obj to not use the same reference
+    // with ES6 and spread operator
+    const person = {...this.state.persons[indexPerson]};
+
+    // same thing but "legacy-way" with old ES
+    //let person = Object.assign({}, objPerson);
+
+    //update the name of the person
+    person.name = event.target.value;
+
+    // make a copy of the original state
+    const updatedPersons = [...this.state.persons];
+
+    // update the position of the array with the new person object updated
+    updatedPersons[indexPerson] = person;
+
+    // updated the state
+    this.setState({persons: updatedPersons});
   }
 
   togglePersonsHandler = () => {
@@ -58,17 +74,17 @@ class App extends Component {
     if (this.state.showPersons) {
       persons = (
         <div>
-          {this.state.persons.map(person => {
+          {this.state.persons.map((person, index) => {
             return <Person
+              click={() => this.deletePersonHandler(index)}
               name={person.name}
               age={person.age}
-            />
+              key={person.id}
+              change={(event) => this.nameChangeHandler(event, person.id)} />
           })}
         </div>
       );
     }
-
-    console.log(persons);
 
     return (
       <div className='App'>
