@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import classes from './App.css';
 import Person from './Person/Person';
-
-
 class App extends Component {
 
   // state is a special property only availabe within a class that extends Component
