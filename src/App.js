@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './App.css';
-// Import our Person component
+import classes from './App.css';
 import Person from './Person/Person';
+
 
 class App extends Component {
 
@@ -36,7 +36,7 @@ class App extends Component {
 
     // clone the obj to not use the same reference
     // with ES6 and spread operator
-    const person = {...this.state.persons[indexPerson]};
+    const person = { ...this.state.persons[indexPerson] };
 
     // same thing but "legacy-way" with old ES
     //let person = Object.assign({}, objPerson);
@@ -51,7 +51,7 @@ class App extends Component {
     updatedPersons[indexPerson] = person;
 
     // updated the state
-    this.setState({persons: updatedPersons});
+    this.setState({ persons: updatedPersons });
   }
 
   togglePersonsHandler = () => {
@@ -60,16 +60,8 @@ class App extends Component {
   }
 
   render() {
-    // use css style a js object
-    let styleObj = {
-      backgroundColor: 'white',
-      font: 'inherit',
-      boder: '1px solid blue',
-      padding: '8px',
-      cursor: 'pointer'
-    }
-
     let persons = null;
+    let buttonClass = '';
 
     if (this.state.showPersons) {
       persons = (
@@ -84,17 +76,28 @@ class App extends Component {
           })}
         </div>
       );
+      buttonClass = classes.Red;
+    }
+
+    const assignedClasses = [];
+
+    if (this.state.persons.length <= 2) {
+      assignedClasses.push(classes.Red);
+    }
+
+    if (this.state.persons.length <= 1) {
+      assignedClasses.push(classes.Bold);
     }
 
     return (
-      <div className='App'>
+      <div className={classes.App}>
         <h1>Hi, from the react app!</h1>
-        <p>I'm running from a docker container!</p>
+        <p className={assignedClasses.join(' ')}>I'm running from a docker container!</p>
 
         {/* calling the function without (), because calling it with switchNameHandler()
          will render automatically on DOM render */}
         <button
-          style={styleObj}
+          className={buttonClass}
           onClick={this.togglePersonsHandler}>Toggle Persons</button>
 
         {/* another way to call the function with arguments is using flat arrow function */}
@@ -107,57 +110,3 @@ class App extends Component {
 }
 
 export default App;
-
-// How to use react Hook instead extends component
-// first import useState
-//import React, { useState } from 'react';
-
-// react Hooks
-// create function instead class
-// const app = props => {
-
-//   // setState from react Hook returns always two elements
-//   // the first element is always the current object
-//   // the second element is a function that allow us to update / change the state
-//   // using js Destructuring we cant store those values in an array
-//   const [personState, setPersonState] = useState({
-//     persons: [
-//       { name: 'Carlos', age: 30 },
-//       { name: 'Paco', age: 50 },
-//       { name: 'Foo', age: 10 }
-//     ]
-//   });
-
-//   // when we use react hook the function ( in this cade setPersonState ), doest not merge the changes
-//   // so we need to call useState again, we dont need to pass an object, just a string will work too
-//   const [otherState, setOtherState] = useState("some random value");
-
-//   console.log(personState, otherState);
-
-//   const switchNameHandler = () => {
-//     setPersonState({
-//       persons: [
-//         { name: 'Carlos VII', age: 80 },
-//         { name: 'Jhon Doe', age: 66 },
-//         { name: 'Foo Foo', age: 16 }
-//       ]
-//     });
-//   }
-
-//   return (
-//     <div className='App'>
-//       <h1>Hi, from the react app!</h1>
-//       <p>I'm running from a docker container!</p>
-
-//       <button onClick={switchNameHandler}>Switch Names</button>
-
-//       <Person name={personState.persons[0].name} age={personState.persons[0].age} />
-//       {/* To use the text between the component we'll use the props.children in the function */}
-//       <Person name={personState.persons[1].name} age={personState.persons[1].age}>My hobbies: racing </Person>
-//       <Person name={personState.persons[2].name} age={personState.persons[2].age} />
-//     </div>
-//   );
-// }
-
-// //export the function with the name of it
-// export default app;

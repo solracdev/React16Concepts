@@ -1,13 +1,12 @@
-// Imports ract library component
+// Imports react library component
 import React from 'react';
-
 // Import style file
-import './Person.css';
+import personClass from './Person.css';
 
 // create the function that returns jsx with ES6 sintax
 const person = (props) => {
     return (
-        <div className="Person">
+        <div className={personClass.Person} >
             {/* to use js code inside jsx we have to wraped it with {} */}
             <p onClick={props.click}>Hi, I'm a person! My name is {props.name} and I'm {props.age} years old</p>
 
@@ -15,10 +14,9 @@ const person = (props) => {
             <p>{props.children}</p>
 
             {/* create an input that will recieve the function to change the name */}
-            <input type="text" onChange={props.change} value={props.name}/>
+            <input type="text" onChange={props.change} value={props.name} />
         </div>
     );
 }
 
-// Export the function
 export default person;
