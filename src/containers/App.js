@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import classes from './App.css';
-import Person from './Person/Person';
+import Persons from '../components/Persons/Persons';
+import Cockpit from '../components/Cockpit/Cockpit';
+
 class App extends Component {
   state = {
     persons: [
@@ -37,43 +39,25 @@ class App extends Component {
 
   render() {
     let persons = null;
-    let buttonClass = '';
 
     if (this.state.showPersons) {
-      persons = (
-        <div>
-          {this.state.persons.map((person, index) => {
-            return <Person
-              click={() => this.deletePersonHandler(index)}
-              name={person.name}
-              age={person.age}
-              key={person.id}
-              change={(event) => this.nameChangeHandler(event, person.id)} />
-          })}
-        </div>
-      );
-      buttonClass = classes.Red;
-    }
-
-    const assignedClasses = [];
-
-    if (this.state.persons.length <= 2) {
-      assignedClasses.push(classes.Red);
-    }
-
-    if (this.state.persons.length <= 1) {
-      assignedClasses.push(classes.Bold);
+      persons = <Persons
+        persons={this.state.persons}
+        clicked={this.deletePersonHandler}
+        changed={this.nameChangeHandler}
+      />;
     }
 
     return (
       <div className={classes.App}>
-        <h1>Hi, from the react app!</h1>
-        <p className={assignedClasses.join(' ')}>I'm running from a docker container!</p>
-
-        <button
-          className={buttonClass}
-          onClick={this.togglePersonsHandler}>Toggle Persons</button>
-
+        <Cockpit
+        // Access the props within the class, with this.props
+        // In this case we have sent a paramater to this class from index.js
+          title={this.props.appTitle}
+          showPersons={this.state.showPersons}
+          persons={this.state.persons}
+          toggle={this.togglePersonsHandler}
+        />
         {persons}
       </div>
     );
