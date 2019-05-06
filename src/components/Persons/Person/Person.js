@@ -1,22 +1,21 @@
-// Imports react library component
-import React from 'react';
-// Import style file
+
+import React, { Component } from 'react';
 import personClass from './Person.css';
 
-// create the function that returns jsx with ES6 sintax
-const person = (props) => {
-    return (
-        <div className={personClass.Person} >
-            {/* to use js code inside jsx we have to wraped it with {} */}
-            <p onClick={props.click}>Hi, I'm a person! My name is {props.name} and I'm {props.age} years old</p>
-
-            {/* to print the text between the opening and close tag componen, we use props.children */}
-            <p>{props.children}</p>
-
-            {/* create an input that will recieve the function to change the name */}
-            <input type="text" onChange={props.change} value={props.name} />
-        </div>
-    );
+class Person extends Component {
+    render() {
+        console.log("[Person.js] rendering...");
+        return (
+            <div className={personClass.Person} >
+                <p onClick={this.props.click} > Hi, I'm a person! My name is {this.props.name} and I'm {this.props.age} years old</p>
+                <p> {this.props.children}</p>
+                <input
+                    type="text"
+                    onChange={this.props.change}
+                    value={this.props.name} />
+            </div >
+        );
+    };
 }
 
-export default person;
+export default Person;

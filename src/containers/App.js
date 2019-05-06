@@ -4,6 +4,12 @@ import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    console.log('[App.js] Constructor');
+  }
+
   state = {
     persons: [
       { id: "Blue", name: 'Carlos', age: 30 },
@@ -11,6 +17,20 @@ class App extends Component {
       { id: "Green", name: 'Foo', age: 10 }
     ],
     showPersons: false
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    console.log('[App.js] getDerivedStateFromProps, props:', props);
+    console.log('[App.js] getDerivedStateFromProps, state:', state);
+    return state;
+  }
+
+  // componentWillMount() {
+  //   console.log('[App.js] componentWillMount');
+  // }
+
+  componentDidMount() {
+    console.log('[App.js] componentDidMount');
   }
 
   deletePersonHandler = personIndex => {
@@ -38,6 +58,7 @@ class App extends Component {
   }
 
   render() {
+    console.log('[App.js] render');
     let persons = null;
 
     if (this.state.showPersons) {
@@ -51,11 +72,11 @@ class App extends Component {
     return (
       <div className={classes.App}>
         <Cockpit
-        // Access the props within the class, with this.props
-        // In this case we have sent a paramater to this class from index.js
+          // Access the props within the class, with this.props
+          // In this case we have sent a paramater to this class from index.js
           title={this.props.appTitle}
           showPersons={this.state.showPersons}
-          persons={this.state.persons}
+          personsLength={this.state.persons.length}
           toggle={this.togglePersonsHandler}
         />
         {persons}
